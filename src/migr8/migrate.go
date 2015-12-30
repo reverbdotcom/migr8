@@ -17,7 +17,7 @@ func dumpKeyAndTTL(key string, sourceConn redis.Conn) (string, int64, error) {
 		return dumpedKey, ttl, err
 	}
 
-	if ttl, err := redis.Int64(sourceConn.Do("pttl", key)); err != nil {
+	if ttl, err = redis.Int64(sourceConn.Do("pttl", key)); err != nil {
 		return dumpedKey, ttl, err
 	}
 
