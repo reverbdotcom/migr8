@@ -31,7 +31,7 @@ func Test_DeleteAllKeysWithPrefix(t *testing.T) {
 		exists, _ := redis.Bool(sourceServer.conn.Do("EXISTS", key))
 
 		if exists {
-			t.Errorf("Found a key %d that should have been deleted", key)
+			t.Errorf("Found a key %s that should have been deleted", key)
 		}
 	}
 
@@ -65,7 +65,7 @@ func Test_DoesNothingInDryRunModeForDelete(t *testing.T) {
 		exists, _ := redis.Bool(sourceServer.conn.Do("EXISTS", key))
 
 		if !exists {
-			t.Errorf("In DryRun mode, but found a key %d that was actually deleted", key)
+			t.Errorf("In DryRun mode, but found a key %s that was actually deleted", key)
 		}
 	}
 }
