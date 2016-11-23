@@ -6,6 +6,8 @@ import (
 	"sync"
 	"time"
 
+	"strings"
+
 	"github.com/codegangsta/cli"
 	"github.com/garyburd/redigo/redis"
 )
@@ -51,12 +53,12 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "source, s",
-			Usage: "The redis server to pull data from",
+			Usage: "The redis server to pull data from (prefix password@ to use auth)",
 			Value: "127.0.0.1:6379",
 		},
 		cli.StringFlag{
 			Name:  "dest, d",
-			Usage: "The destination redis server",
+			Usage: "The destination redis server (prefix password@ to use auth)",
 			Value: "127.0.0.1:6379",
 		},
 		cli.IntFlag{
@@ -95,22 +97,49 @@ func ParseConfig(c *cli.Context) {
 }
 
 func sourceConnection(source string) redis.Conn {
+	// look for PASS@ADDRESS:PORT
+	var pass, sourceAddr string
+	if strings.Contains(source, "@") {
+		s := strings.Split(source, "@")
+		pass, sourceAddr = s[0], s[1]
+	} else {
+		pass, sourceAddr = "", source
+	}
 	// attempt to connect to source server
-	sourceConn, err := redis.Dial("tcp", source)
+	sourceConn, err := redis.Dial("tcp", sourceAddr)
 	if err != nil {
 		panic(err)
 	}
-
+	if len(pass) > 0 {
+		_, err = sourceConn.Do("AUTH", pass)
+		if err != nil {
+			panic(err)
+		}
+	}
 	return sourceConn
 }
 
 func destConnection(dest string) redis.Conn {
+
+	var pass, destAddr string
+	if strings.Contains(dest, "@") {
+		s := strings.Split(dest, "@")
+		pass, destAddr = s[0], s[1]
+	} else {
+		pass, destAddr = "", dest
+	}
+
 	// attempt to connect to source server
-	destConn, err := redis.Dial("tcp", dest)
+	destConn, err := redis.Dial("tcp", destAddr)
 	if err != nil {
 		panic(err)
 	}
-
+	if len(pass) > 0 {
+		_, err = destConn.Do("AUTH", pass)
+		if err != nil {
+			panic(err)
+		}
+	}
 	return destConn
 }
 
