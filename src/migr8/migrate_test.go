@@ -32,7 +32,7 @@ func Test_MigrateAllKeysWithAPrefix(t *testing.T) {
 		exists, _ := redis.Bool(destServer.conn.Do("EXISTS", key))
 
 		if !exists {
-			t.Errorf("Could not find a key %d that should have been migrated", key)
+			t.Errorf("Could not find a key %s that should have been migrated", key)
 		}
 	}
 
@@ -66,13 +66,13 @@ func Test_MigrateAllKeysWithTTLs(t *testing.T) {
 		exists, _ := redis.Bool(destServer.conn.Do("EXISTS", key))
 
 		if !exists {
-			t.Errorf("Could not find a key %d that should have been migrated", key)
+			t.Errorf("Could not find a key %s that should have been migrated", key)
 		}
 
 		ttl, _ := redis.Int64(destServer.conn.Do("PTTL", key))
 
 		if ttl < 1 || ttl > 600000 {
-			t.Errorf("Could not find a TTL for key %d that should have been migrated", key)
+			t.Errorf("Could not find a TTL for key %s that should have been migrated", key)
 		}
 	}
 }
@@ -101,7 +101,7 @@ func Test_DoesNothingInDryRunModeForMigrate(t *testing.T) {
 		exists, _ := redis.Bool(destServer.conn.Do("EXISTS", key))
 
 		if exists {
-			t.Errorf("In DryRun mode, but found a key %d that was actually migrated", key)
+			t.Errorf("In DryRun mode, but found a key %s that was actually migrated", key)
 		}
 	}
 }

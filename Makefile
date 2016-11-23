@@ -1,6 +1,6 @@
 .PHONY: all test build linux
 
-all: clean test build
+all: clean vet test build
 clean:
 	@rm -rf bin/*
 
@@ -9,6 +9,9 @@ build: clean
 
 test:
 	@gb test
+
+vet:
+	@go vet src/**/*.go
 
 linux: clean
 	@GOOS=linux gb build
