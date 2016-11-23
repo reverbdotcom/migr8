@@ -33,8 +33,9 @@ func StopTestServers() {
 
 func NewRedisTestServer(port string) *RedisTestServer {
 	srv := &RedisTestServer{
-		port: port,
-		url:  fmt.Sprintf("127.0.0.1:%s", port),
+		port:     port,
+		url:      fmt.Sprintf("127.0.0.1:%s", port),
+		password: fmt.Sprintf("testpass%s", port),
 	}
 
 	srv.Start()
@@ -43,14 +44,15 @@ func NewRedisTestServer(port string) *RedisTestServer {
 }
 
 type RedisTestServer struct {
-	cmd  *exec.Cmd
-	port string
-	url  string
-	conn redis.Conn
+	cmd      *exec.Cmd
+	port     string
+	url      string
+	password string
+	conn     redis.Conn
 }
 
 func (s *RedisTestServer) Start() {
-	args := fmt.Sprintf("--port %s", s.port)
+	args := fmt.Sprintf("--port %s --requirepass \"%s\"", s.port, s.password)
 	s.cmd = exec.Command("redis-server", args)
 
 	err := s.cmd.Start()
