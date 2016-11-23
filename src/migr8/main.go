@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/url"
 	"os"
 	"sync"
 	"time"
@@ -51,12 +52,12 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "source, s",
-			Usage: "The redis server to pull data from",
+			Usage: "The redis server to pull data from (prefix password@ to use auth)",
 			Value: "127.0.0.1:6379",
 		},
 		cli.StringFlag{
 			Name:  "dest, d",
-			Usage: "The destination redis server",
+			Usage: "The destination redis server (prefix password@ to use auth)",
 			Value: "127.0.0.1:6379",
 		},
 		cli.IntFlag{
@@ -95,22 +96,36 @@ func ParseConfig(c *cli.Context) {
 }
 
 func sourceConnection(source string) redis.Conn {
+	u, _ := url.Parse(source)
+
 	// attempt to connect to source server
-	sourceConn, err := redis.Dial("tcp", source)
+	sourceConn, err := redis.Dial("tcp", u.Host)
 	if err != nil {
 		panic(err)
 	}
-
+	if len(u.User.String()) > 0 {
+		_, err = sourceConn.Do("AUTH", u.User.String())
+		if err != nil {
+			panic(err)
+		}
+	}
 	return sourceConn
 }
 
 func destConnection(dest string) redis.Conn {
+	u, _ := url.Parse(dest)
+
 	// attempt to connect to source server
-	destConn, err := redis.Dial("tcp", dest)
+	destConn, err := redis.Dial("tcp", u.Host)
 	if err != nil {
 		panic(err)
 	}
-
+	if len(u.User.String()) > 0 {
+		_, err = destConn.Do("AUTH", u.User.String())
+		if err != nil {
+			panic(err)
+		}
+	}
 	return destConn
 }
 
