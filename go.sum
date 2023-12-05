@@ -1,0 +1,4 @@
+github.com/codegangsta/cli v1.10.2 h1:2XP7LrElYXmnuJpfKCJf11ENt1qXJGt/6vNI3kIaEaw=
+github.com/codegangsta/cli v1.10.2/go.mod h1:/qJNoX69yVSKu5o4jLyXAENLRyk1uhi7zkbQ3slBdOA=
+github.com/garyburd/redigo v0.0.0-20151029235527-6ece6e0a09f2 h1:oPANGfJj1kUNthxd8FT6mvg/a1/P4IupFWjzxcTukjY=
+github.com/garyburd/redigo v0.0.0-20151029235527-6ece6e0a09f2/go.mod h1:NR3MbYisc3/PwhQ00EMzDiPmrwpPxAn5GI05/YaO1SY=
