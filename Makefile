@@ -5,13 +5,13 @@ clean:
 	@rm -rf bin/*
 
 build: clean
-	@gb build
+	@go build
 
 test:
-	@gb test
+	@go test
 
 vet:
-	@go vet src/**/*.go
+	@go vet ./...
 
 linux: clean
-	@GOOS=linux gb build
+	@GOOS=linux go build

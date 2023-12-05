@@ -1,0 +1,7 @@
+# github.com/codegangsta/cli v1.10.2
+## explicit
+github.com/codegangsta/cli
+# github.com/garyburd/redigo v0.0.0-20151029235527-6ece6e0a09f2
+## explicit
+github.com/garyburd/redigo/internal
+github.com/garyburd/redigo/redis
